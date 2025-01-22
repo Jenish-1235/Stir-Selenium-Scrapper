@@ -93,12 +93,6 @@ http://localhost:5000
    - Store the data in MongoDB
    - Display the trends on the webpage
 
-
-![alt text](./images/image-1.png)
-![alt text](./images/image.png)
-![alt text](./images/image-2.png)
-![alt text](./images/image-3.png)
-
 ## Error Handling
 
 The application handles various error scenarios:
