@@ -1,0 +1,78 @@
+<!-- templates/fetch_trends.html -->
+{% extends "layout.html" %}
+
+{% block title %}Fetch Trends{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="text-center mb-4">Fetch Latest Twitter Trends</h1>
+        <div class="d-flex justify-content-center mb-4">
+            <form method="GET" action="/fetch_trends" class="me-3">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-sync-alt"></i> Fetch Latest Trends
+                </button>
+            </form>    
+            <form method="GET" action="/dashboard">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-chart-line"></i> View Dashboard
+                </button>
+            </form>    
+        </div>
+
+        <!-- Success Alert -->
+        {% if success %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ success }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <!-- Error Alert -->
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if trends %}
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-list"></i> Latest Trends
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-responsive">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Request ID</strong></td>
+                            <td>{{ object_id }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IP Address</strong></td>
+                            <td>{{ ip_address }}</td>
+                        </tr>
+                        {% for trend in trends %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ trend }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <p class="text-muted">No trends fetched yet. Click the button above to fetch the latest trends.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!-- templates/dashboard.html -->
+{% extends "layout.html" %}
+
+{% block title %}Twitter Trends Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <h1 class="text-center mb-4">Twitter Trends Dashboard</h1>
+        <div class="d-flex justify-content-center mb-4">
+            <form method="GET" action="/fetch_trends">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-sync-alt"></i> Fetch Latest Trends
+                </button>
+            </form>    
+        </div>
+
+        <!-- Success Alert -->
+        {% if success %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ success }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <!-- Error Alert -->
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if records %}
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-history"></i> Previous Trends
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="dashboardTable" class="table table-striped table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Object ID</th>
+                                <th>IP Address</th>
+                                <th>Trend 1</th>
+                                <th>Trend 2</th>
+                                <th>Trend 3</th>
+                                <th>Trend 4</th>
+                                <th>Trend 5</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                            <tr>
+                                <td>{{ record._id }}</td>
+                                <td>{{ record.ip_address }}</td>
+                                <td>{{ record.trends[0] if record.trends|length > 0 else 'N/A' }}</td>
+                                <td>{{ record.trends[1] if record.trends|length > 1 else 'N/A' }}</td>
+                                <td>{{ record.trends[2] if record.trends|length > 2 else 'N/A' }}</td>
+                                <td>{{ record.trends[3] if record.trends|length > 3 else 'N/A' }}</td>
+                                <td>{{ record.trends[4] if record.trends|length > 4 else 'N/A' }}</td>
+                                <td>{{ record.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <p class="text-muted">No trends data available. Click the button above to fetch trends.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Optional: DataTables Integration for Enhanced Table Features -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#dashboardTable').DataTable({
+            "order": [[ 7, "desc" ]], // Order by Timestamp descending
+            "pageLength": 10,
+            "lengthChange": false,
+            "searching": true
+        });
+    });
+</script>
+{% endblock %}
